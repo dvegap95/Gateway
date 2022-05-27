@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "test": "jest --config ./jest.config.json",
-    "test-watch": "jest --watch --config ./jest.config.json ",
+    "test-watch": "jest --watch --runInBand --config ./jest.config.json ",
     "start": "nodemon src/index.js"
   },
   "author": "Daniel Vega Pino",
