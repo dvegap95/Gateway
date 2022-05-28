@@ -2,10 +2,10 @@ const Gateway = require("../../models/Gateway");
 require("dotenv").config();
 const mongoose = require("mongoose");
 
-const _id = new mongoose.Types.ObjectId();;
+const _id = new mongoose.Types.ObjectId();
 const gatewayData = {
 	name:"gatewayTest",
-	serialNumber:123,
+	serialNumber:"123",
 	ipAddress:"10.10.10.10",
 	devices:[
 		{uid:1,vendor:"vendor1",status:"online"},
@@ -29,7 +29,6 @@ describe("mongoDB gateway CRUD", () => {
         let gw = new Gateway();
         gw.ipAddress = ip.value;
         let error = gw.validateSync();
-        console.log(error, ip);
         expect(Boolean(error)).toBe(!ip.valid);
         if(!ip.valid){
 			expect(error.errors.ipAddress.message).toBe(`${ip.value} is not a valid ip address`);
@@ -42,12 +41,11 @@ describe("mongoDB gateway CRUD", () => {
       mongoose.connect(process.env.DATABASE_URL);
       const db = mongoose.connection;
       db.on("error", (e) => {
-        console.error(e);
         process.exit(1);
       });
-      db.on("open", () => {
-        console.log("db open");
-      });
+    //   db.on("open", () => {
+    //     console.log("db open");
+    //   });
     });
     it("saves and loads a gateway",async () => {
 		let gw = new Gateway({...gatewayData,_id});
@@ -93,7 +91,7 @@ describe("mongoDB gateway CRUD", () => {
 	});
 
 	it("deletes gateway",async ()=>{
-		await Gateway.findByIdAndDelete(_id);
+		await Gateway.findByIdAndRemove(_id);
 		let gwResp = await Gateway.findById(_id);
 		expect(Boolean(gwResp)).toBe(false);
 	})

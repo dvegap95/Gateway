@@ -1,0 +1,22 @@
+GET http://localhost:3001/api/gateways
+
+###     
+
+POST http://localhost:3001/api/gateways
+Content-Type: application/json
+
+{
+  "name": "gatewayTest",
+  "serialNumber": "123",
+  "ipAddress": "10.10.10.10",
+  "devices": [
+    { "uid": 1, "vendor": "vendor1", "status": "online" },
+    { "uid": 2, "vendor": "vendor2", "status": "offline" },
+    { "uid": 3, "vendor": "vendor3", "status": "online" }
+  ]
+
+}
+
+### 
+
+GET http://localhost:3001/api/gateways/aaa
