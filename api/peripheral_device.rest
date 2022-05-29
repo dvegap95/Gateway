@@ -1,0 +1,20 @@
+GET http://localhost:3001/api/peripheral-devices
+
+###     
+
+
+POST http://localhost:3001/api/peripheral-devices
+Content-Type: application/json
+
+{
+  "uid": 123,
+  "vendor":"vendor",  
+  "status":"online"
+}
+
+### 
+
+GET http://localhost:3001/api/peripheral-devices/6292ccdde477b8f8239f14aa
+
+###
+DELETE http://localhost:3001/api/peripheral-devices/6292ccdde477b8f8239f14aa

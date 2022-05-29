@@ -1,5 +1,4 @@
-const path = require('path');
-require('dotenv').config({path:path.resolve(process.cwd(),"test.env")});
+require("../dotenv");
 const request = require("supertest");
 const server = require("../../server");
 

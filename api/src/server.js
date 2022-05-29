@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const express = require('express');
 const gatewayRouter = require("./routes/gatewayRoutes");
+const peripheralDeviceRouter = require("./routes/peripheralDeviceRoutes");
 const path = require("path")
 const resolve = path.resolve
 
@@ -12,12 +13,13 @@ db.on('open',()=>{});
 
 const app = express();
 
-app.use(express.static(process.env.STATIC_CONTENT_PATH));
+app.use(express.static(process.env.STATIC_CONTENT_PATH||"./dist"));
 
 app.use(express.json());
 
 
 app.use("/api/gateways",gatewayRouter);
+app.use("/api/peripheral-devices",peripheralDeviceRouter);
 
 
 app.use("/api",(req, res, next) => {
