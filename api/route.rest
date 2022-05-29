@@ -2,6 +2,27 @@ GET http://localhost:3001/api/gateways
 
 ###     
 
+GET http://localhost:3001/api/gateways/62916f689db5570eae1bbe10/device/62916f689db5570eae1bbe11/
+###     
+
+DELETE  http://localhost:3001/api/gateways/62916f689db5570eae1bbe10/device/62916f689db5570eae1bbe11/
+###    
+
+
+POST  http://localhost:3001/api/gateways/62916f689db5570eae1bbe10/device
+Content-Type: application/json
+
+{
+        "uid": 2,
+        "vendor": "vendor2",
+        "created": "2022-05-28T00:40:08.215Z",
+        "status": "offline",
+        "_id": "62916f689db5570eae1bbe12"
+}
+
+###    
+
+
 POST http://localhost:3001/api/gateways
 Content-Type: application/json
 

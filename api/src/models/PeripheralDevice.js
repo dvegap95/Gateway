@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 // •	status - online/offline.
 
 const peripheralDeviceSchema = new mongoose.Schema({
-  uid: { type: Number, required: true },
+  uid: { type: Number },
   vendor: String,
   created: { type: Date, required: true, default: new Date() },
   status: {

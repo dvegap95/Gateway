@@ -29,7 +29,10 @@ const gatewaySchema = new mongoose.Schema({
       message: props => `${props.value} is not a valid ip address`
     },
   },
-  devices: [PeripheralDeviceSchema]
+  devices: {type:[PeripheralDeviceSchema],validate:{
+    validator:(d=>d.length<=10),
+    message:"Too many devices"
+  }}
 });
 
 module.exports = mongoose.model("GatewaySchema", gatewaySchema);

@@ -1,20 +1,7 @@
-const server = require("../../server");
+const path = require('path');
+require('dotenv').config({path:path.resolve(process.cwd(),"test.env")});
 const request = require("supertest");
-
-// describe('hello world tests', () => {
-//     test('it returns hello world', async () => {
-//         const resp = await request(server).get("/api/gateways/");
-//         expect(resp.statusCode).toBe(200);
-//         expect(resp.text).toBe("Hello World");
-//     });
-//     test('it returns hello world + id', async () => {
-//         for(let i = 1;i < 30;i+=3){
-//             const resp = await request(server).get("/api/gateways/" + i);
-//         expect(resp.statusCode).toBe(200);
-//         expect(resp.text).toBe("Hello World " + i);
-//         }
-//     });
-// });
+const server = require("../../server");
 
 const gatewayData = {
   name: "gatewayTest",
@@ -27,7 +14,7 @@ const gatewayData = {
   ],
 };
 
-describe("api rest", () => {
+describe("gateways routes", () => {
   // it("creates a gateway",()=>{
   //     const resp = await request(server).post("/api/gateways/",{body:gatewayData});
   //     expect(resp.statusCode).toBe(201);
@@ -38,7 +25,7 @@ describe("api rest", () => {
     expect(resp.statusCode).toBe(200);
     expect(resp.body.length).toBeGreaterThanOrEqual(0);
   });
-  test("gateway CRUD", async () => {
+  test("gateways CRUD", async () => {
     let response = await request(server)
       .post("/api/gateways/")
       .send(gatewayData); //creates gateway
@@ -102,12 +89,10 @@ describe("api rest", () => {
 
     response4 = await request(server).delete("/api/gateways/" + gateway._id);
     expect(response4.statusCode).toBe(404);
-
-    
   });
 
   it("returns 404 when not found", async () => {
-    response = await request(server).get("/api/gateways/" + "random-id");
+    let response = await request(server).get("/api/gateways/" + "random-id");
     expect(response.statusCode).toBe(404);
     response = await request(server)
       .patch("/api/gateways/" + "random-id")
@@ -117,33 +102,84 @@ describe("api rest", () => {
     expect(response.statusCode).toBe(404);
   });
 
-  it("validates ip to create",async()=>{
+  it("validates when creating and updating", async () => {
     let gateway = gatewayData;
     gateway.ipAddress = "300.0.0.1";
     let response = await request(server)
       .post("/api/gateways/")
-      .send(gatewayData); //creates gateway
+      .send(gateway); //creates gateway with wrong ip
     expect(response.statusCode).toBe(400);
+    expect(response.body.ipAddress.name).toBe("ValidatorError");
 
     gateway.ipAddress = "200.0.0.1";
+
     response = await request(server)
       .post("/api/gateways/")
-      .send(gatewayData); //creates gateway
+      .send({...gateway,devices:new Array(11).fill({})}); //creates gateway
+      expect(response.statusCode).toBe(400);
+      expect(response.body.devices.name).toBe("ValidatorError");
+  
+    response = await request(server).post("/api/gateways/").send({...gateway,devices:new Array(10).fill({})}); //creates right gateway
     expect(response.statusCode).toBe(201);
 
     let id = response.body._id;
 
-    response = await request(server).patch("/api/gateways/" + id).send({
-      ipAddress:"3.3.4.5.6"
-    });
+    response = await request(server)
+      .patch("/api/gateways/" + id)
+      .send({
+        ipAddress: "3.3.4.5.6",
+      });
     expect(response.statusCode).toBe(400);
 
-    response = await request(server).patch("/api/gateways/" + id).send({
-      ipAddress:"3.4.5.6"
+
+    response = await request(server)
+    .patch("/api/gateways/" + id)
+    .send({
+      devices:new Array(11).fill({})
     });
+    expect(response.statusCode).toBe(400);
+    expect(response.body.devices.name).toBe("ValidatorError");
+
+    response = await request(server)
+      .patch("/api/gateways/" + id)
+      .send({
+        ipAddress: "3.4.5.6",
+        devices:new Array(10).fill({})
+      });
     expect(response.statusCode).toBe(200);
     expect(response.body.ipAddress).toBe("3.4.5.6");
 
-    response = await request(server).delete("/api/gateways/"+id);
-  })
+    response = await request(server).delete("/api/gateways/" + id);
+    expect(response.statusCode).toBe(200);
+  });
+
+  it("adds, removes and validates gateway's devices", async () => {
+    let response = await request(server).post("/api/gateways/").send({});
+    expect(response.statusCode).toBe(201);
+    expect(response.body.devices.length).toBe(0);
+    let _id = response.body._id;
+    console.log({_id});
+
+    response = await request(server).post("/api/gateways/"+_id+"/device").send({});
+    expect(response.statusCode).toBe(201);
+    expect(response.body.status).toBe("offline");//default
+    let devId = response.body._id;
+
+    response = await request(server).get("/api/gateways/"+_id);
+    expect(response.statusCode).toBe(200);
+    expect(response.body.devices.length).toBe(1);
+    expect(response.body._id).toBe(_id);
+    expect(response.body.devices[0]._id).toBe(devId);
+
+    response = await request(server).delete("/api/gateways/"+_id+"/device/"+devId);
+    expect(response.statusCode).toBe(200);
+
+
+    response = await request(server).get("/api/gateways/"+_id);
+    expect(response.statusCode).toBe(200);
+    expect(response.body.devices.length).toBe(0);
+
+    response = await request(server).delete("/api/gateways/" + _id);
+    expect(response.statusCode).toBe(200);
+  });
 });
