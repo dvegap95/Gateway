@@ -14,25 +14,32 @@ const gatewaySchema = new mongoose.Schema({
     type: String,
     validate: {
       validator: (ip) => {
-        let bytes = ip.split(".");
+        //ip address validator (algorithm)
+        let bytes = ip.split("."); //separates ip sections (bytes)
         return (
-          bytes.length === 4 &&
+          bytes.length === 4 && //4 ip sections found
           bytes.reduce((valid, currByte) => {
-            return valid &&
-            !Number.isNaN(currByte) &&
-            Number.isInteger(+currByte) &&
-            +currByte >= 0 &&
-            +currByte <= 255
+            //validate each section
+            return (
+              valid && //is previous section valid?
+              !Number.isNaN(currByte) && //is current section a valid number?
+              Number.isInteger(+currByte) && //is current section an integer?
+              +currByte >= 0 &&
+              +currByte <= 255 // is current section value betwen 0 and 255?
+            );
           }, true)
         );
       },
-      message: props => `${props.value} is not a valid ip address`
+      message: (props) => `${props.value} is not a valid ip address`, //message on validation failure
     },
   },
-  devices: {type:[PeripheralDeviceSchema],validate:{
-    validator:(d=>d.length<=10),
-    message:"Too many devices"
-  }}
+  devices: {
+    type: [PeripheralDeviceSchema],
+    validate: {
+      validator: (d) => d.length <= 10, // field validation: no more than 10 devices allowed per gateway
+      message: "Too many devices",
+    },
+  },
 });
 
 module.exports = mongoose.model("GatewaySchema", gatewaySchema);

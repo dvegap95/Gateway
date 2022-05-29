@@ -9,10 +9,12 @@ const mongoose = require("mongoose");
 const peripheralDeviceSchema = new mongoose.Schema({
   uid: { type: Number },
   vendor: String,
+  //created (date created) field setted to current date as default, 
+  //which will always be the date of creation
   created: { type: Date, required: true, default: new Date() },
   status: {
     type: String,
-    enum: ["online", "offline"],
+    enum: ["online", "offline"],//only 2 values possible
     required: true,
     default: "offline",
   },
