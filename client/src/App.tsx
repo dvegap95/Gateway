@@ -6,12 +6,19 @@ import HomeView from "./views/HomeView";
 import GatewaysView from "./views/GatewaysView";
 import PeripheralDevicesView from "./views/PeripheralDevicesView";
 import Header from "./components/Header";
+import "./App.css"
+import styled from "styled-components";
+
+const Container = styled.div`
+  margin-top: 60px;
+  height: calc(100vh - 60px);
+`
 
 function App() {
   return (
-    <div>
+    <>
       <Header />
-      <div style={{ marginTop: 50 }}>
+      <Container>
         <Routes>
           <Route path="/" element={<HomeView />} />
           <Route path="/gateways" element={<GatewaysView />} />
@@ -20,9 +27,9 @@ function App() {
             element={<PeripheralDevicesView />}
           />
         </Routes>
-      </div>
+      </Container>
       <ToastContainer/>
-    </div>
+    </>
   );
 }
 

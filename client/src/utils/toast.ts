@@ -8,6 +8,7 @@ let defaultOptions:ToastOptions = {
 
 
 export default function toast(str:string,options:ToastOptions | undefined = {}){
+    alert(str);
     return _toast(str,{...defaultOptions,...options});
 }
 

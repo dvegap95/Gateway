@@ -21,7 +21,7 @@ const StyledLink = styled(Link)`
 
 export default function Header() {
   return (
-    <AppBar>
+    <AppBar position="fixed">
       <StyledToolbar variant="dense">
         <StyledLink to="/">Home</StyledLink> 
         <StyledLink to="/gateways">Gateways</StyledLink> 
