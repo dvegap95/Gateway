@@ -1,15 +1,10 @@
+import React, { useState } from "react";
 import {
   Card,
   CardActions,
-  CardContent,
-  CardHeader,
-  Dialog,
-  DialogActions,
-  DialogTitle,
   IconButton,
   Tooltip,
 } from "@mui/material";
-import React, { useState } from "react";
 import styled from "styled-components";
 import Circle from "@mui/icons-material/Circle";
 import Edit from "@mui/icons-material/Edit";
@@ -57,13 +52,14 @@ const StatusDot = styled(Circle)`
     props.status === "online" ? "#07BC12" : "gray"};
 `;
 
+//controlled component for display peripheral device information as a card.
 export default function PeripheralDeviceCard(props: {
   device: PeripheralDevice;
-  onEdit?: (device: PeripheralDevice) => void;
-  onDelete?: (device: PeripheralDevice) => void;
+  onEdit?: (device: PeripheralDevice) => void;//callback for edit button pressed
+  onDelete?: (device: PeripheralDevice) => void;//callback for delete button pressed
 }) {
   const { device } = props;
-  const [deleteConfirm, setDeleteConfirm] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState(false); //controls when confirm dialog is open
   return (
     <StyledCard>
       <StyledCardTitle>
@@ -93,7 +89,7 @@ export default function PeripheralDeviceCard(props: {
             size="small"
             onClick={(e) => {
               e.stopPropagation;
-              setDeleteConfirm(true);
+              setDeleteConfirm(true);//opens confirm dialog before deleting
             }}
           >
             <Delete></Delete>
@@ -103,11 +99,12 @@ export default function PeripheralDeviceCard(props: {
       <ConfirmDialog
         title="Confirm delete item?"
         onConfirm={() => {
+          //if confirm dialog is accepted notify to the parent component the item to be deleted
           props.onDelete && props.onDelete(device);
-          setDeleteConfirm(false);
+          setDeleteConfirm(false);//close the dialog
         }}
         onCancel={() => {
-          setDeleteConfirm(false);
+          setDeleteConfirm(false);//close the dialog
         }}
         open={deleteConfirm}
       />

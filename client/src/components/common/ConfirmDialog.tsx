@@ -4,9 +4,10 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 
+//Intermediate dialog for action confirmation
 export default function ConfirmDialog(props: {
-  onConfirm: Function;
-  onCancel: Function;
+  onConfirm: Function; //confirm callback (User clicks accept button)
+  onCancel: Function; //cancel callback (Dialog closes without accept being clicked)
   title?: string;
   open: boolean;
 }) {
@@ -17,12 +18,12 @@ export default function ConfirmDialog(props: {
         <Button
           autoFocus
           variant="outlined"
-          onClick={() => props.onConfirm && props.onConfirm()}
+          onClick={() => props.onConfirm && props.onConfirm()} //confirm
         >
           Confirm
         </Button>
         <Button
-          onClick={() => props.onCancel && props.onCancel()}
+          onClick={() => props.onCancel && props.onCancel()} //cancel
           variant="outlined"
           color="error"
           autoFocus

@@ -2,60 +2,80 @@ import { TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
 var timeoutHandler = -1;
+
+//mui text field adapted to work as a controlled component over a property of an object
 export default function CrudTextEdit(props: {
-  value: string;
-  element: any;
+  propertyName: string; //name of the target property in the object
+  element: any; //object containing the target property
   label?: string;
-  cantBeWrong?: boolean;
-  rules?: Array<(value: string) => boolean | string>;
-  onErrorChange?: (error: boolean | string) => void;
+  //change callback (passes the entire object, not only the property)
   onChange: (element: any) => void;
+  //set of validation callbacks receiving the input value and returning true for valid,
+  //false for error with no message or a string for error message to be displayed
+  rules?: Array<(value: string) => boolean | string>;
+  //if true, input validation failure is prevented to be reflected in the actual input value
+  cantBeWrong?: boolean;
+  onErrorChange?: (error: boolean | string) => void; //error status callback for parent to be aware of validation process
   fullWidth?: boolean;
-  transform?: Function;
-}) {
+  transform?: Function; //applies a transformation to the target property before updating the object containing it
+} & any) {
   const [error, setError] = useState(false as boolean | string);
 
   useEffect(() => {
-    props.onErrorChange && props.onErrorChange(error);
-    clearTimeout(timeoutHandler);
-    timeoutHandler = -1;
+    props.onErrorChange && props.onErrorChange(error); //if error callback exists in props, notify error change
     if (props.cantBeWrong) {
-      timeoutHandler = setTimeout(handleChange,1000);
+      //manage a timeout to reset the error status since when props.cantBeWrong is true,
+      //no actual invalid inputs can exist, so it is revalidated a second after the user
+      //tried to type the last wrong character
+      clearTimeout(timeoutHandler); //clears the timeout for reset it every time the error status change
+      //if there's still an error, timeout is set again to revalidate after 1 second
+      if (error) timeoutHandler = setTimeout(handleChange, 1000);
+
+      //TODO timeout is not being reset properly 
     }
   }, [error]);
 
-  const handleChange = (value: any = props.element[props.value]) => {
+  //evaluates current input value by default
+  const handleChange = (value: any = props.element[props.propertyName]) => {
     console.log({ value });
+    //are there validation rules and a value to validate?
     if (value && props.rules && props.rules.length) {
       let i = 0;
+      //iterate through rules sequentially
       for (; i < props.rules.length; i++) {
-        let result = props.rules[i](value);
+        let result = props.rules[i](value); //evaluate the rule
         if (result !== true) {
-          let err = result === false ? true : result;
-          console.log({ err });
-          setError(err);
+          //did validation fail?
+          let err = result === false ? true : result; //set error = message | false (empty error)
+          setError(err); //react state update
+          //if the value cant be wrong, nothing else happens so the changes aren't reflected
+          //in the object containing the target property
           if (props.cantBeWrong) return;
-          break;
+          break; //otherwise break the for loop when validation failed for the first time
         }
       }
-      if (i === props.rules.length) setError(false);
+      if (i === props.rules.length) setError(false); // clear the error if for loop completed without problems
     }
-    if (value === "") setError(false);
-    let obj: any = {};
-    obj[props.value] = props.transform ? props.transform(value) : value;
-    let resultElement = { ...props.element, ...obj };
-    if (!value) delete resultElement[props.value];
-    props.onChange(resultElement);
+    if (!value) setError(false); //if(!value) clear the error //TODO handle 'required' property for required values
+    let obj: any = { ...props.element }; //copy the props element
+    obj[props.propertyName] = props.transform ? props.transform(value) : value; //update target property
+    if (!value) delete obj[props.propertyName]; //deletes the value if it's casted to boolean as false
+    props.onChange(obj); // notify change to parent
   };
+
+  const value = props.element[props.propertyName];
   return (
     <TextField
+      {...props}
       fullWidth={props.fullWidth}
-      label={props.label || props.value}
-      value={props.element[props.value]}
+      label={props.label || props.propertyName}
+      value={value === null || value === undefined ? "" : value}
       error={!!error}
       helperText={error || undefined}
       onChange={(event) => handleChange(event?.target?.value)}
       onBlur={() => {
+        //revalidate when focus looses to stablish the current state of the error
+        //if props.cantBeWrong is true, all the validation errors should disappear
         handleChange();
       }}
     />

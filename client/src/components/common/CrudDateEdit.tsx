@@ -2,27 +2,35 @@ import * as React from "react";
 import TextField from "@mui/material/TextField";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import styled from "styled-components";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 
 const StyledDateEdit = styled(DateTimePicker)`
   width: 100%;
 `;
+//mui date time picker adapted to work as a controlled component over a property of an object
 export default function CrudDateEdit(props: {
-  value: string;
-  element: any;
-  onChange: (element: any) => void;
+  propertyName: string; //name of the target property in the object
+  element: any; //object containing the target property
+  onChange: (element: any) => void; //change callback (passes the entire object, not only the property)
   fullWidth: boolean;
-  label: string;
+  label: string; //input label
 }) {
   return (
-    <StyledDateEdit
-      renderInput={(props) => <TextField {...props} fullWidth />}
-      label={props.label || props.value}
-      value={props.element[props.value] || null}
-      onChange={(value) => {
-        let obj: any = {};
-        obj[props.value] = value instanceof Date ? value.toISOString() : "";
-        props.onChange({ ...props.element, ...obj });
-      }}
-    />
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <StyledDateEdit
+        renderInput={(props) => (
+          <TextField {...props} fullWidth={props.fullWidth} />
+        )}
+        label={props.label || props.propertyName}
+        value={props.element[props.propertyName] || null} //allow date to be unspecified
+        onChange={(value) => {
+          let obj: any = { ...props.element }; //copy the props element
+          obj[props.propertyName] =
+            value instanceof Date ? value.toISOString() : ""; //update target property
+          props.onChange(obj); // notify change to parent
+        }}
+      />
+    </LocalizationProvider>
   );
 }

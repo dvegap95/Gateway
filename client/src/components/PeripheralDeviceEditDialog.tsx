@@ -23,52 +23,61 @@ const StyledFormControl = styled.div`
 `;
 
 export default function PeripheralDeviceEditDialog(props: {
-  device: PeripheralDevice;
-  onChange: (device: PeripheralDevice) => void;
-  open: boolean;
-  onCancel: () => void;
-  onAccept: () => void;
+  device: PeripheralDevice; //device value for controlled component
+  onChange: (device: PeripheralDevice) => void; //callback for controlled component
+  open: boolean; //mui Dialog open prop
+  onCancel: () => void; //cancel callback
+  onAccept: () => void; //accept callback
 }) {
+  //retrieve breakpoint configuration from theme to determine wether
+  //the dialog should render in fullscreen mode
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
+  //controls individual field errors for general form validation
   const [error, setError] = useState({} as any);
 
   const { device } = props;
   return (
     <Dialog open={props.open} fullScreen={fullScreen}>
-      <DialogTitle>{device._id ? "Edit device" : "Create device"}</DialogTitle>
+      <DialogTitle data-testid="dialog_title_edit">
+        {device._id ? "Edit device" : "Create device"}
+      </DialogTitle>
       <DialogContent>
         <StyledFormControl>
           <CrudTextEdit
             element={device}
-            value="uid"
+            propertyName="uid"
             label="UID"
             onChange={props.onChange}
             rules={[
+              //uid validation rules (it should be a positive integer)
               (val: any) =>
-                (Number.isSafeInteger(+val) && !("" + val).includes(".")) ||
+                (Number.isInteger(+val) && !("" + val).includes(".")) ||
                 "Value must be an Integer",
+              (val: any) =>
+                Number.isSafeInteger(+val) || "Value too long for an Integer",
               (val: any) => +val >= 0 || "Value must be positive",
             ]}
             cantBeWrong
             fullWidth
-            transform={(v: string | undefined) => (v ? +v : null)}
-            onErrorChange={(e) => {
+            transform={(v: string | undefined) => (v ? +v : null)} //uid field should be a number
+            onErrorChange={(e: string | boolean) => {
               let err = { ...error };
               if (!e) {
                 delete err.uid;
               } else {
                 err.uid = e;
               }
-              setError({ ...err });
+              setError({ ...err }); //handle input error
             }}
+            data-testid="uid_edit"
           />
         </StyledFormControl>
         <StyledFormControl>
           <CrudTextEdit
             element={device}
-            value="vendor"
+            propertyName="vendor"
             label="Vendor"
             onChange={props.onChange}
             fullWidth
@@ -77,10 +86,10 @@ export default function PeripheralDeviceEditDialog(props: {
         <StyledFormControl>
           <CrudSelectEdit
             element={device}
-            value="status"
+            propertyName="status"
             label="Status"
             onChange={props.onChange}
-            items={["online", "offline"]}
+            items={["online", "offline"]} //all 2 possible statuses of the device
             default="offline"
             fullWidth
           />
@@ -89,7 +98,7 @@ export default function PeripheralDeviceEditDialog(props: {
           <CrudDateEdit
             label="Created"
             element={device}
-            value="created"
+            propertyName="created"
             onChange={props.onChange}
             fullWidth
           />
@@ -100,6 +109,7 @@ export default function PeripheralDeviceEditDialog(props: {
           autoFocus
           variant="outlined"
           onClick={props.onAccept}
+          //disabled if any field triggered any error (error !== {})
           disabled={!!Object.entries(error).length}
         >
           Accept

@@ -12,33 +12,35 @@ const StyledSelectEdit = styled(Select)`
   min-width: 200px;
 `;
 
+//mui selector adapted to work as a controlled component over a property of an object
 export default function CrudSelectEdit(props: {
-  value: string;
-  element: any;
+  propertyName: string; //name of the target property in the object
+  element: any; //object containing the target property
   label?: string;
-  onChange: (element: any) => void;
-  items: Array<any>;
-  default?: any;
+  onChange: (element: any) => void; //change callback (passes the entire object, not only the property)
+  items: Array<any>; //list of items to be rendered as selection options
+  default?: any; //selected when no target property's value is provided
   fullWidth?: boolean;
 }) {
   return (
     <FormControl fullWidth={props.fullWidth}>
       <InputLabel id="crud-select-label">
-        {props.label || props.value}
+        {props.label || props.propertyName}
       </InputLabel>
       <StyledSelectEdit
+        //renders provided InputLabel component with the proper behavior (animations and stuff)
         labelId="crud-select-label"
-        label={props.label || props.value}
-        value={props.element[props.value] || props.default}
+        label={props.label || props.propertyName}
+        value={props.element[props.propertyName] || props.default}
         onChange={(event) => {
           let value: any = event.target?.value;
-          let obj: any = {};
-          obj[props.value] = value;
-          props.onChange({ ...props.element, ...obj });
+          let obj: any = { ...props.element }; //copy the props element
+          obj[props.propertyName] = value; //update target property
+          props.onChange(obj); // notify change to parent
         }}
       >
         {props.items &&
-          props.items.map((item: string) => (
+          props.items.map((item: string) => (//render the items as menu items
             <MenuItem key={item} value={item}>
               {item}
             </MenuItem>
