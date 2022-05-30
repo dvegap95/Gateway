@@ -3,16 +3,21 @@ import {
   CardActions,
   CardContent,
   CardHeader,
+  Dialog,
+  DialogActions,
+  DialogTitle,
   IconButton,
   Tooltip,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Circle from "@mui/icons-material/Circle";
 import Edit from "@mui/icons-material/Edit";
 import { PeripheralDevice } from "../entities/entities";
+import { Delete } from "@mui/icons-material";
+import ConfirmDialog from "./common/ConfirmDialog";
 
-const StyledCard = styled(Card)`
+export const StyledCard = styled(Card)`
   margin: 10px;
   min-width: 240px;
   max-width: 380px;
@@ -23,7 +28,7 @@ const StyledCard = styled(Card)`
     background: #bbb;
   }
 `;
-const StyledCardContent = styled.div`
+export const StyledCardContent = styled.div`
   color: #666;
   padding: 10px;
   padding-top: 2px;
@@ -49,14 +54,16 @@ const StatusDot = styled(Circle)`
   max-width: 12px;
   margin: 5px;
   color: ${(props: { status: any }) =>
-    props.status === "online" ? "#4bb543" : "gray"};
+    props.status === "online" ? "#07BC12" : "gray"};
 `;
 
 export default function PeripheralDeviceCard(props: {
   device: PeripheralDevice;
-  onEdit?: Function;
+  onEdit?: (device: PeripheralDevice) => void;
+  onDelete?: (device: PeripheralDevice) => void;
 }) {
   const { device } = props;
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
   return (
     <StyledCard>
       <StyledCardTitle>
@@ -70,14 +77,40 @@ export default function PeripheralDeviceCard(props: {
       </StyledCardContent>
       <StyledCardActions>
         <div>Created at {new Date(device.created).toLocaleString()}</div>
-        <IconButton
-          disabled={!props.onEdit}
-          size="small"
-          onClick={() => props.onEdit && props.onEdit(device)}
-        >
-          <Edit></Edit>
-        </IconButton>
+        <div>
+          <IconButton
+            disabled={!props.onEdit}
+            size="small"
+            onClick={(e) => {
+              e.stopPropagation();
+              return props.onEdit && props.onEdit(device);
+            }}
+          >
+            <Edit></Edit>
+          </IconButton>
+          <IconButton
+            disabled={!props.onEdit}
+            size="small"
+            onClick={(e) => {
+              e.stopPropagation;
+              setDeleteConfirm(true);
+            }}
+          >
+            <Delete></Delete>
+          </IconButton>
+        </div>
       </StyledCardActions>
+      <ConfirmDialog
+        title="Confirm delete item?"
+        onConfirm={() => {
+          props.onDelete && props.onDelete(device);
+          setDeleteConfirm(false);
+        }}
+        onCancel={() => {
+          setDeleteConfirm(false);
+        }}
+        open={deleteConfirm}
+      />
     </StyledCard>
   );
 }

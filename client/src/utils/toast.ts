@@ -4,11 +4,11 @@ let defaultOptions:ToastOptions = {
     type:'success',
     position: "bottom-right",
     autoClose:2000,
+    progress:"none",
 }
 
 
 export default function toast(str:string,options:ToastOptions | undefined = {}){
-    alert(str);
     return _toast(str,{...defaultOptions,...options});
 }
 
