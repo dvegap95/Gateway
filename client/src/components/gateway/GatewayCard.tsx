@@ -80,7 +80,7 @@ export default function GatewayCard(props: {
         ))}
       </StyledCardContent>
       <StyledCardActions>
-        <div>serial: {gateway.serialNumber}</div>
+        <div>serial: {gateway.serialNumber || "no serial number"}</div>
         <div>
           <IconButton
             disabled={!props.onEdit}

@@ -1,3 +1,4 @@
+//types 
 export interface PeripheralDevice {
   uid: number;
   vendor: string;

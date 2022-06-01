@@ -27,44 +27,53 @@ const Container = styled.div`
   justify-content: center;
 `;
 
+//gateway crud
 export default function GatewayView() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); //loading control
+  //store fetched gateways
   const [data, setData] = useState(new Array<Gateway>());
+  //model gateway for the edit/create dialog
   const [editedGateway, setEditedGateway] = useState({} as Gateway);
+  //edition dialog open control
   const [editing, setEditing] = useState(false);
+
+  //fetch gateways once
   useEffect(() => {
     custom_axios
       .get(endpoint)
       .then((res) => {
         console.log({ res });
-        setData(res.data);
-        setLoading(false);
+        setData(res.data); //store fetched gateways
+        setLoading(false); //stop loading (which is true by default)
+        //success is required for the component to work, so it won't be notified
       })
       .catch((e) => {
-        errorToast(e.message || "Connection Error");
+        errorToast(e.message || "Connection Error"); //notify error
         setLoading(false);
       });
   }, []);
 
+  //handle edit dialog accepted
   function handleAccept() {
     setLoading(true);
+    //is edited gateway an already existent element?
     if (editedGateway._id) {
       custom_axios
-        .patch(endpoint + "/" + editedGateway._id, editedGateway)
+        .patch(endpoint + "/" + editedGateway._id, editedGateway) //use patch endpoint
         .then((res) => {
           let index = data.findIndex((el) => {
             return el._id === res.data._id;
-          });
+          }); //find patched gateway in the local stored gateway list
           if (index >= 0) {
-            Object.assign((data[index] = res.data));
+            Object.assign((data[index] = res.data)); //update it
           }
-          setData([...data]);
+          setData([...data]); //update state
           setLoading(false);
-          setEditing(false);
-          toast("Successfully edited!");
+          setEditing(false); //close dialog
+          toast("Successfully edited!"); //notify success
         })
         .catch((e) => {
-          errorToast(e.message || JSON.stringify(e));
+          errorToast(e.message || JSON.stringify(e)); //notify error
           setLoading(false);
           setEditing(false);
         });
@@ -72,37 +81,39 @@ export default function GatewayView() {
       custom_axios
         .post(endpoint, editedGateway)
         .then((res) => {
+          //add element to local gateways and update stored gateways status
           let d = [...data];
           setData(d.concat([res.data]));
-          setEditing(false);
+          setEditing(false); //close dialog
           setLoading(false);
-          toast("Successfully created!");
+          toast("Successfully created!"); //notify success
         })
         .catch((e) => {
-          errorToast(e.message || JSON.stringify(e));
+          errorToast(e.message || JSON.stringify(e)); //notify error
           setLoading(false);
           setEditing(false);
         });
     }
   }
 
+  //handle delete gateway
   function handleDelete(gateway: Gateway) {
     custom_axios
-      .delete(endpoint + "/" + gateway._id)
+      .delete(endpoint + "/" + gateway._id) //delete request to api
       .then((res) => {
         let index = data.findIndex((el) => {
           return el._id === res.data._id;
-        });
+        }); //find deleted gateway in local stored list
         if (index >= 0) {
-          data.splice(index, 1);
+          data.splice(index, 1); //remove it if found
         }
-        setData([...data]);
+        setData([...data]); //update list
         setLoading(false);
-        setEditing(false);
-        toast("Successfully deleted");
+        setEditing(false); //close dialog
+        toast("Successfully deleted"); //notify success
       })
       .catch((e) => {
-        errorToast(e.message || JSON.stringify(e));
+        errorToast(e.message || JSON.stringify(e)); //notify error
         setLoading(false);
         setEditing(false);
       });

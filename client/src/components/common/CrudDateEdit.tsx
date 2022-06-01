@@ -11,7 +11,7 @@ const StyledDateEdit = styled(DateTimePicker)`
 //mui date time picker adapted to work as a controlled component over a property of an object
 export default function CrudDateEdit(
   props: TextFieldProps & {
-    propname: string; //name of the target property in the object
+    propName: string; //name of the target property in the object
     element: any; //object containing the target property
     onValueChange: (element: any) => void; //change callback (passes the entire object, not only the property)
     label: string; //input label
@@ -21,11 +21,11 @@ export default function CrudDateEdit(
     <LocalizationProvider dateAdapter={AdapterDateFns} >
       <StyledDateEdit
         renderInput={(params) => <TextField {...params} {...props} />}
-        label={props.label || props.propname}
-        value={props.element[props.propname] || null} //allow date to be unspecified
+        label={props.label || props.propName}
+        value={props.element[props.propName] || null} //allow date to be unspecified
         onChange={(value) => {
           let obj: any = { ...props.element }; //copy the props element
-          obj[props.propname] =
+          obj[props.propName] =
             value instanceof Date ? value.toISOString() : ""; //update target property
           props.onValueChange(obj); // notify change to parent
         }}

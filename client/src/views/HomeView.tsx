@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+
 export default function HomeView() {
   return (
     <div style={{padding:"50px 20px"}}>

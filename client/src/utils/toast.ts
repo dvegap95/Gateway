@@ -1,5 +1,7 @@
 import { toast as _toast, ToastOptions } from 'react-toastify';
 
+
+//default application-wide toast options
 let defaultOptions:ToastOptions = {
     type:'success',
     position: "bottom-right",

@@ -35,6 +35,7 @@ const StyledFormControlGroup = styled.div`
 
 const ScrollView = styled.div`
   overflow-y: auto;
+  overflow-x: hidden;
   max-height: ${(props: { fullScreen: boolean }) =>
     props.fullScreen ? "calc(100vh - 460px)" : "230px"};
   min-height: 230px;
@@ -91,22 +92,31 @@ export default function GatewayEditDialog(
 
   const { gateway } = props;
 
+  //delete the api-deleted peripheral device from local gateway's devices array
   function handleDeleteDevice(device: PeripheralDevice) {
-    let gw = { ...gateway };
+   let gw = { ...gateway };
+   //find device in gateway
     let index = gw.devices.findIndex((el) => {
       return el._id === device._id;
     });
+    //remove it if found
     if (index >= 0) {
       gw.devices.splice(index, 1);
     }
+    //update gateway (notify to parent since it's a controlled component)
     props.onValueChange(gw);
   }
 
+    
+//Add the api-added peripheral device to local gateway's devices array
   function handleAddDevice(device: PeripheralDevice) {
+    //validate 10 devices rule (this is only for newly created gateways, otherwise validation
+    //has already been done at this point by the API)
     if (gateway.devices?.length === 10) {
-      return errorToast("No more than 10 devices allowed");
+      return errorToast("Too many devices");
     }
     let gw = { ...gateway };
+    //if gw has no devices array, create it
     if (!gw.devices) gw.devices = [];
     gw.devices.push(device);
     props.onValueChange(gw);
@@ -122,7 +132,7 @@ export default function GatewayEditDialog(
           <StyledFormControl>
             <CrudTextEdit
               element={gateway}
-              propname="name"
+              propName="name"
               label="Name"
               onValueChange={props.onValueChange}
               fullWidth
@@ -132,7 +142,7 @@ export default function GatewayEditDialog(
           <StyledFormControl>
             <CrudTextEdit
               element={gateway}
-              propname="ipAddress"
+              propName="ipAddress"
               label="IP"
               onValueChange={props.onValueChange}
               rules={[
@@ -171,7 +181,7 @@ export default function GatewayEditDialog(
           <StyledFormControl>
             <CrudTextEdit
               element={gateway}
-              propname="serialNumber"
+              propName="serialNumber"
               label="SerialNumber"
               onValueChange={props.onValueChange}
               fullWidth

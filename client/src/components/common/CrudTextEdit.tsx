@@ -1,24 +1,26 @@
 import { TextField, TextFieldProps } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
-var timeoutHandler:any = -1;
+var timeoutHandler: any = -1;
 
 //mui text field adapted to work as a controlled component over a property of an object
-export default function CrudTextEdit(props: TextFieldProps & {
-  propname: string; //name of the target property in the object
-  element: any; //object containing the target property
-  label?: string;
-  //change callback (passes the entire object, not only the property)
-  onValueChange: (element: any) => void;
-  //set of validation callbacks receiving the input value and returning true for valid,
-  //false for error with no message or a string for error message to be displayed
-  rules?: Array<(value: string) => boolean | string>;
-  //if true, input validation failure is prevented to be reflected in the actual input value
-  cantBeWrong?: boolean;
-  onErrorChange?: (error: boolean | string) => void; //error status callback for parent to be aware of validation process
-  fullWidth?: boolean;
-  transform?: Function; //applies a transformation to the target property before updating the object containing it
-}) {
+export default function CrudTextEdit(
+  props: TextFieldProps & {
+    propName: string; //name of the target property in the object
+    element: any; //object containing the target property
+    label?: string;
+    //change callback (passes the entire object, not only the property)
+    onValueChange: (element: any) => void;
+    //set of validation callbacks receiving the input value and returning true for valid,
+    //false for error with no message or a string for error message to be displayed
+    rules?: Array<(value: string) => boolean | string>;
+    //if true, input validation failure is prevented to be reflected in the actual input value
+    cantBeWrong?: boolean;
+    onErrorChange?: (error: boolean | string) => void; //error status callback for parent to be aware of validation process
+    fullWidth?: boolean;
+    transform?: Function; //applies a transformation to the target property before updating the object containing it
+  }
+) {
   const [error, setError] = useState(false as boolean | string);
 
   useEffect(() => {
@@ -31,12 +33,12 @@ export default function CrudTextEdit(props: TextFieldProps & {
       //if there's still an error, timeout is set again to revalidate after 1 second
       if (error) timeoutHandler = setTimeout(handleChange, 1000);
 
-      //TODO timeout is not being reset properly 
+      //TODO timeout is not being reset properly
     }
   }, [error]);
 
   //evaluates current input value by default
-  const handleChange = (value: any = props.element[props.propname]) => {
+  const handleChange = (value: any = props.element[props.propName]) => {
     console.log({ value });
     //are there validation rules and a value to validate?
     if (value && props.rules && props.rules.length) {
@@ -58,16 +60,19 @@ export default function CrudTextEdit(props: TextFieldProps & {
     }
     if (!value) setError(false); //if(!value) clear the error //TODO handle 'required' property for required values
     let obj: any = { ...props.element }; //copy the props element
-    obj[props.propname] = props.transform ? props.transform(value) : value; //update target property
-    if (!value) delete obj[props.propname]; //deletes the value if it's casted to boolean as false
+    if (value)
+      obj[props.propName] = props.transform
+        ? props.transform(value)
+        : value; //update target property
+    else obj[props.propName] = null; //sets the value to null if it's falsy so the api can delete it
     props.onValueChange(obj); // notify change to parent
   };
 
-  const value = props.element[props.propname];
+  const value = props.element[props.propName];
   return (
     <TextField
       {...props}
-      label={props.label || props.propname}
+      label={props.label || props.propName}
       value={value === null || value === undefined ? "" : value}
       error={!!error}
       helperText={error || undefined}

@@ -71,7 +71,7 @@ export default function PeripheralDeviceEditDialog(props: {
           <StyledFormControl>
             <CrudTextEdit
               element={device}
-              propname="uid"
+              propName="uid"
               label="UID"
               onValueChange={props.onValueChange}
               rules={[
@@ -101,7 +101,7 @@ export default function PeripheralDeviceEditDialog(props: {
           <StyledFormControl>
             <CrudTextEdit
               element={device}
-              propname="vendor"
+              propName="vendor"
               label="Vendor"
               onValueChange={props.onValueChange}
               fullWidth
@@ -110,7 +110,7 @@ export default function PeripheralDeviceEditDialog(props: {
           <StyledFormControl>
             <CrudSelectEdit
               element={device}
-              propname="status"
+              propName="status"
               label="Status"
               onChange={props.onValueChange}
               items={["online", "offline"]} //all 2 possible statuses of the device
@@ -122,7 +122,7 @@ export default function PeripheralDeviceEditDialog(props: {
             <CrudDateEdit
               label="Created"
               element={device}
-              propname="created"
+              propName="created"
               onValueChange={props.onValueChange}
               fullWidth
             />

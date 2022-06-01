@@ -23,62 +23,73 @@ import {
 
 const endpoint = "/api/peripheral-devices";
 
-const StyledSelect = styled(Select)`
-  border: none;
-`;
-
+//Peripheral device selector which also allows to create peripheral devices
 export default function PeripheralDeviceSelect(
   props: FormControlProps & {
-    value: PeripheralDevice;
-    onValueChange: (dev: PeripheralDevice) => void;
-    fullWidth?: boolean;
+    value: PeripheralDevice; //currently selected device (for controlled component)
+    onValueChange: (dev: PeripheralDevice) => void; //value change callback (for controlled component)
     label: string;
+    //allows to filter devices available for selection so already selected can be omitted
     filter?: (el: PeripheralDevice) => boolean;
   }
 ) {
   const [loading, setLoading] = useState(true);
+  //store fetched peripheral devices
   const [data, setData] = useState(new Array<PeripheralDevice>());
+  //model peripheral device for the edit/create dialog (create only for this component)
   const [editedDevice, setEditedDevice] = useState({} as PeripheralDevice);
+  //edition dialog open control
   const [editing, setEditing] = useState(false);
+
+  //fetch peripheral devices once
   useEffect(() => {
     custom_axios
       .get(endpoint)
       .then((res) => {
-        console.log({ res });
-        setData(res.data);
-        setLoading(false);
+        setData(res.data); //store fetched devices
+        setLoading(false); //stop loading (which is true by default)
+        //success is required for the component to work, so it won't be notified
       })
       .catch((e) => {
-        errorToast(e.message || "Connection Error");
+        errorToast(e.message || "Connection Error"); //notify error
         setLoading(false);
       });
   }, []);
 
+  //handle create dialog accepted
   function handleAccept() {
     setLoading(true);
     custom_axios
       .post(endpoint, editedDevice)
       .then((res) => {
-        let d = [...data];
-        setData(d.concat([res.data]));
-        setEditing(false);
+        //add element to local peripheral devices and update stored peripheral devices status
+        let d = [...data]; 
+        setData(d.concat([res.data])); 
+        
+        setEditing(false); //close dialog
         setLoading(false);
-        props.onValueChange(res.data);
-        toast("Successfully created!");
+        props.onValueChange(res.data); //notify to parent component
+        toast("Successfully created!"); //notify success
       })
       .catch((e) => {
-        errorToast(e.message || JSON.stringify(e));
+        errorToast(e.message || JSON.stringify(e)); //notify error
         setLoading(false);
         setEditing(false);
       });
   }
 
+  //handle peripheral device selection
   function handleSelect(id: string) {
-    if (!id) props.onValueChange({} as PeripheralDevice);
+    //receives selected id
+    if (!id) props.onValueChange({} as PeripheralDevice); //notify an empty object if no id
+
+    //ignore this particular id since it's for "Create..."
+    //option which has it's own click event handler
     if (id === "_create_") return;
-    let sel = data.find((el) => el._id === id);
-    if (!sel) return;
-    props.onValueChange && sel && props.onValueChange(sel);
+
+    let sel = data.find((el) => el._id === id); //find element by id
+    if (!sel) return; //sel shouldn't be falsy but if it is, ignore it
+    props.onValueChange && sel && props.onValueChange(sel); //notify selection to parent
   }
 
   return (
@@ -86,7 +97,7 @@ export default function PeripheralDeviceSelect(
       {props.label && (
         <InputLabel id="device-select-label">{props.label}</InputLabel>
       )}
-      <StyledSelect
+      <Select
         labelId="device-select-label"
         onChange={(e) => {
           handleSelect(e.target?.value as string);
@@ -96,6 +107,7 @@ export default function PeripheralDeviceSelect(
       >
         {data
           .filter(
+            //here's where props.filter is applied
             props.filter ||
               function (d) {
                 return true;
@@ -116,7 +128,7 @@ export default function PeripheralDeviceSelect(
         >
           {loading ? "Loading..." : "Create..."}
         </MenuItem>
-      </StyledSelect>
+      </Select>
       <PeripheralDeviceEditDialog
         open={editing}
         device={editedDevice}
