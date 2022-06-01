@@ -25,6 +25,7 @@ describe("mongoDB gateway CRUD", () => {
 		  { value: "262.168", valid: false },
 		  { value: "dsdkmsald sakdl", valid: false },
 		  { value: "1/1.2.3.5", valid: false },
+		  { value: null, valid: true },
 		];
   
 		for (let i = 0; i < ips.length; i++) {//for each set of data

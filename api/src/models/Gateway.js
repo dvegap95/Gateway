@@ -14,6 +14,7 @@ const gatewaySchema = new mongoose.Schema({
     type: String,
     validate: {
       validator: (ip) => {
+        if(ip === null || ip === undefined)return true;//so it's not required
         //ip address validator (algorithm)
         let bytes = ip.split("."); //separates ip sections (bytes)
         return (
