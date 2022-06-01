@@ -1,22 +1,16 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Loading from "../common/Loading";
-import PeripheralDeviceCard, {
+import {
   StyledCard as Card,
 } from "../peripheral_device/PeripheralDeviceCard";
 import custom_axios from "../../utils/custom_axios";
 import { PeripheralDevice } from "../../entities/entities";
 import toast, { errorToast } from "../../utils/toast";
-import PeripheralDeviceEditDialog from "../peripheral_device/PeripheralDeviceEditDialog";
 import { Add, Delete } from "@mui/icons-material";
 import {
-  CardContent,
   CardProps,
   CircularProgress,
   IconButton,
-  MenuItem,
-  Select,
-  Tooltip,
 } from "@mui/material";
 import PeripheralDeviceSelect from "../peripheral_device/PeripheralDeviceSelect";
 
@@ -50,7 +44,8 @@ export default function GatewayDeviceCard(
 
   const endpoint = `/api/gateways/${props.gatewayId}/device`;
 
-  function handleAdd() {
+  //handle the adition of a peripheral device to an existent gateway
+  function handleAddDevice() {
     setLoading(true);
     custom_axios
       .post(endpoint, selectedDevice)
@@ -115,7 +110,7 @@ export default function GatewayDeviceCard(
           <IconButton
             onClick={() => {
               props.gatewayId
-                ? handleAdd()
+                ? handleAddDevice()
                 : props.onAdd && props.onAdd(selectedDevice);
               setSelectedDevice({} as PeripheralDevice);
             }}
