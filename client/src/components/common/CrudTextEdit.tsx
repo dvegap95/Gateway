@@ -1,7 +1,7 @@
 import { TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
-var timeoutHandler = -1;
+var timeoutHandler:any = -1;
 
 //mui text field adapted to work as a controlled component over a property of an object
 export default function CrudTextEdit(props: {

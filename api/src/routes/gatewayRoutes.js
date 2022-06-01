@@ -94,7 +94,7 @@ router.delete("/:id/device/:devid", getGatewayMiddleware, async (req, res) => {
   }
   try {
     await res.gateway.save(); //save changes to db
-    return res.status(200).json(device); //return 200 OK and the deleted device object
+    return res.status(200).json(device[0]); //return 200 OK and the deleted device object
   } catch (e) {
     return res.status(500).json(e); //something wrong
   }

@@ -148,39 +148,39 @@ describe("gateway routes", () => {
     expect(response.body.ipAddress).toBe("3.4.5.6"); //expect gateway ipAddress to be changed
     expect(response.body.devices.length).toBe(10); //expect gateway to have 10 devices
 
-    response = await request(server).delete("/api/gateways/" + id);// delete test gateway
-    expect(response.statusCode).toBe(200);//expect success
+    response = await request(server).delete("/api/gateways/" + id); // delete test gateway
+    expect(response.statusCode).toBe(200); //expect success
   });
 
   it("adds, removes and validates gateway's devices", async () => {
     //post request to create gateway
     let response = await request(server).post("/api/gateways/").send({});
-    expect(response.statusCode).toBe(201);//expect success
-    expect(response.body.devices.length).toBe(0);//expect gateway devices array to be empty
-    let _id = response.body._id;//store gateway id
+    expect(response.statusCode).toBe(201); //expect success
+    expect(response.body.devices.length).toBe(0); //expect gateway devices array to be empty
+    let _id = response.body._id; //store gateway id
 
     //post to specific gateway's device endpoint with new device valid data as body
     //should create a device and add it to the gateway
     response = await request(server)
       .post("/api/gateways/" + _id + "/device")
       .send({ uid: 1 });
-    expect(response.statusCode).toBe(201);//expect created successfully
+    expect(response.statusCode).toBe(201); //expect created successfully
     expect(response.body.uid).toBe(1); //expect feedback data to match sent data
-    let devId0 = response.body._id;//save created device id
+    let devId0 = response.body._id; //save created device id
 
     //add another new device to gateway
     response = await request(server)
       .post("/api/gateways/" + _id + "/device")
       .send({ uid: 2 });
-    expect(response.statusCode).toBe(201);// expect created successfully
+    expect(response.statusCode).toBe(201); // expect created successfully
     expect(response.body.status).toBe("offline"); //default
     expect(response.body.uid).toBe(2); //expect feedback data to match sent data
-    let devId1 = response.body._id;//save created device id
+    let devId1 = response.body._id; //save created device id
 
     //get the previously created gateway
     response = await request(server).get("/api/gateways/" + _id);
-    expect(response.statusCode).toBe(200);//expect success
-    expect(response.body.devices.length).toBe(2);//expect it to have 2 devices
+    expect(response.statusCode).toBe(200); //expect success
+    expect(response.body.devices.length).toBe(2); //expect it to have 2 devices
     //expect devices id's and uid's to match created ones
     expect(response.body.devices[0]._id).toBe(devId0);
     expect(response.body.devices[0].uid).toBe(1);
@@ -191,11 +191,12 @@ describe("gateway routes", () => {
     response = await request(server).delete(
       "/api/gateways/" + _id + "/device/" + devId0
     );
-    expect(response.statusCode).toBe(200);//expect success
+    expect(response.statusCode).toBe(200); //expect success
+    expect(response.body._id).toBe(devId0); //expect result id to match deleted id
 
     //get the previously created gateway
     response = await request(server).get("/api/gateways/" + _id);
-    expect(response.statusCode).toBe(200);//expect success
+    expect(response.statusCode).toBe(200); //expect success
 
     //expect gateway to have 1 device since the other was deleted
     expect(response.body.devices.length).toBe(1);
@@ -204,7 +205,7 @@ describe("gateway routes", () => {
     expect(response.body.devices[0]._id).toBe(devId1);
     expect(response.body.devices[0].uid).toBe(2);
 
-    response = await request(server).delete("/api/gateways/" + _id);//delete test gateway
-    expect(response.statusCode).toBe(200);//expect success
+    response = await request(server).delete("/api/gateways/" + _id); //delete test gateway
+    expect(response.statusCode).toBe(200); //expect success
   });
 });
