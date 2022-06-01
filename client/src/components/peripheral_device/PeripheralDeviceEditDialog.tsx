@@ -22,6 +22,29 @@ const StyledFormControl = styled.div`
   min-width: 250px;
 `;
 
+const StyledFormControlGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  max-width: 500px;
+  min-width: ${(props: { fullScreen: boolean }) =>
+    props.fullScreen ? "290px" : "20px"};
+`;
+
+const StyledDialogContent = styled(DialogContent)`
+  display: flex;
+  ${(props: { fullScreen: boolean }) =>
+    props.fullScreen
+      ? `
+    align-items:center;
+    flex-direction:column;
+    `
+      : `
+      flex-direction:row
+      align-items:flex-start;
+      `};
+`;
+
 export default function PeripheralDeviceEditDialog(props: {
   device: PeripheralDevice; //device value for controlled component
   onValueChange: (device: PeripheralDevice) => void; //callback for controlled component
@@ -43,67 +66,69 @@ export default function PeripheralDeviceEditDialog(props: {
       <DialogTitle data-testid="dialog_title_edit">
         {device._id ? "Edit device" : "Create device"}
       </DialogTitle>
-      <DialogContent>
-        <StyledFormControl>
-          <CrudTextEdit
-            element={device}
-            propname="uid"
-            label="UID"
-            onValueChange={props.onValueChange}
-            rules={[
-              //uid validation rules (it should be a positive integer)
-              (val: any) =>
-                (Number.isInteger(+val) && !("" + val).includes(".")) ||
-                "Value must be an Integer",
-              (val: any) =>
-                Number.isSafeInteger(+val) || "Value too long for an Integer",
-              (val: any) => +val >= 0 || "Value must be positive",
-            ]}
-            cantBeWrong
-            fullWidth
-            transform={(v: string | undefined) => (v ? +v : null)} //uid field should be a number
-            onErrorChange={(e: string | boolean) => {
-              let err = { ...error };
-              if (!e) {
-                delete err.uid;
-              } else {
-                err.uid = e;
-              }
-              setError({ ...err }); //handle input error
-            }}
-            data-testid="uid_edit"
-          />
-        </StyledFormControl>
-        <StyledFormControl>
-          <CrudTextEdit
-            element={device}
-            propname="vendor"
-            label="Vendor"
-            onValueChange={props.onValueChange}
-            fullWidth
-          />
-        </StyledFormControl>
-        <StyledFormControl>
-          <CrudSelectEdit
-            element={device}
-            propname="status"
-            label="Status"
-            onChange={props.onValueChange}
-            items={["online", "offline"]} //all 2 possible statuses of the device
-            default="offline"
-            fullWidth
-          />
-        </StyledFormControl>
-        <StyledFormControl>
-          <CrudDateEdit
-            label="Created"
-            element={device}
-            propname="created"
-            onValueChange={props.onValueChange}
-            fullWidth
-          />
-        </StyledFormControl>
-      </DialogContent>
+      <StyledDialogContent fullScreen={fullScreen}>
+        <StyledFormControlGroup fullScreen={fullScreen}>
+          <StyledFormControl>
+            <CrudTextEdit
+              element={device}
+              propname="uid"
+              label="UID"
+              onValueChange={props.onValueChange}
+              rules={[
+                //uid validation rules (it should be a positive integer)
+                (val: any) =>
+                  (Number.isInteger(+val) && !("" + val).includes(".")) ||
+                  "Value must be an Integer",
+                (val: any) =>
+                  Number.isSafeInteger(+val) || "Value too long for an Integer",
+                (val: any) => +val >= 0 || "Value must be positive",
+              ]}
+              cantBeWrong
+              fullWidth
+              transform={(v: string | undefined) => (v ? +v : null)} //uid field should be a number
+              onErrorChange={(e: string | boolean) => {
+                let err = { ...error };
+                if (!e) {
+                  delete err.uid;
+                } else {
+                  err.uid = e;
+                }
+                setError({ ...err }); //handle input error
+              }}
+              data-testid="uid_edit"
+            />
+          </StyledFormControl>
+          <StyledFormControl>
+            <CrudTextEdit
+              element={device}
+              propname="vendor"
+              label="Vendor"
+              onValueChange={props.onValueChange}
+              fullWidth
+            />
+          </StyledFormControl>
+          <StyledFormControl>
+            <CrudSelectEdit
+              element={device}
+              propname="status"
+              label="Status"
+              onChange={props.onValueChange}
+              items={["online", "offline"]} //all 2 possible statuses of the device
+              default="offline"
+              fullWidth
+            />
+          </StyledFormControl>
+          <StyledFormControl>
+            <CrudDateEdit
+              label="Created"
+              element={device}
+              propname="created"
+              onValueChange={props.onValueChange}
+              fullWidth
+            />
+          </StyledFormControl>
+        </StyledFormControlGroup>
+      </StyledDialogContent>
       <DialogActions>
         <Button
           autoFocus

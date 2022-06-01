@@ -92,6 +92,7 @@ export default function PeripheralDeviceSelect(
           handleSelect(e.target?.value as string);
         }}
         value={props.value._id || ""}
+        color="grey"
       >
         {data
           .filter(

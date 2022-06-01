@@ -19,6 +19,15 @@ const StyledCard = styled(Card)`
   height: 90px;
 `;
 
+const Container = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-items: center;
+  margin: auto;
+  justify-content: center;
+`;
+
 export default function PeripheralDevicesView() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(new Array<PeripheralDevice>());
@@ -100,8 +109,21 @@ export default function PeripheralDevicesView() {
       });
   }
   return (
-    <div>
+    <Container>
       {loading && <Loading open={loading} />}
+      {!data?.length && (
+        <div
+          style={{
+            fontSize: "small",
+            textAlign: "center",
+            margin: "10% 10px",
+            width: "100%"
+          }}
+        >
+          No peripheral devices
+        </div>
+      )}
+
       {data.map((device) => (
         <PeripheralDeviceCard
           device={device}
@@ -144,6 +166,6 @@ export default function PeripheralDevicesView() {
         onCancel={() => setEditing(false)}
         onAccept={handleAccept}
       />
-    </div>
+    </Container>
   );
 }

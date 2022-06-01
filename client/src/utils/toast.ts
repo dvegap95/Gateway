@@ -4,6 +4,7 @@ let defaultOptions:ToastOptions = {
     type:'success',
     position: "bottom-right",
     autoClose:1000,
+    hideProgressBar:true
 }
 
 

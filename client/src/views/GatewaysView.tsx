@@ -19,6 +19,14 @@ const StyledCard = styled(Card)`
   height: 90px;
 `;
 
+const Container = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-items: center;
+  justify-content: center;
+`;
+
 export default function GatewayView() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(new Array<Gateway>());
@@ -100,8 +108,20 @@ export default function GatewayView() {
       });
   }
   return (
-    <div>
+    <Container>
       {loading && <Loading open={loading} />}
+      {!data?.length && (
+        <div
+          style={{
+            fontSize: "small",
+            textAlign: "center",
+            margin: "10% 10px",
+            width: "100%",
+          }}
+        >
+          No gateways
+        </div>
+      )}
       {data.map((gateway) => (
         <GatewayCard
           gateway={gateway}
@@ -144,6 +164,6 @@ export default function GatewayView() {
         onCancel={() => setEditing(false)}
         onAccept={handleAccept}
       />
-    </div>
+    </Container>
   );
 }

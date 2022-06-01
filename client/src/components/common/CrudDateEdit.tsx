@@ -18,9 +18,9 @@ export default function CrudDateEdit(
   }
 ) {
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
+    <LocalizationProvider dateAdapter={AdapterDateFns} >
       <StyledDateEdit
-        renderInput={(props) => <TextField {...props} />}
+        renderInput={(params) => <TextField {...params} {...props} />}
         label={props.label || props.propname}
         value={props.element[props.propname] || null} //allow date to be unspecified
         onChange={(value) => {

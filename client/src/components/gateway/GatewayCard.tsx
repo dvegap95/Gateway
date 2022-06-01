@@ -8,8 +8,7 @@ import ConfirmDialog from "../common/ConfirmDialog";
 
 export const StyledCard = styled(Card)`
   margin: 10px;
-  min-width: 240px;
-  max-width: 380px;
+  width: 350px;
   &:hover {
     background: #eee;
   }
@@ -22,6 +21,7 @@ export const StyledCardContent = styled.div`
   padding: 10px;
   padding-top: 2px;
   margin: 0;
+  min-height: 100px;
 `;
 const StyledCardActions = styled(CardActions)`
   font-size: small;
