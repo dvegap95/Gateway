@@ -14,7 +14,7 @@ const StyledSelectEdit = styled(Select)`
 
 //mui selector adapted to work as a controlled component over a property of an object
 export default function CrudSelectEdit(props: {
-  propertyName: string; //name of the target property in the object
+  propname: string; //name of the target property in the object
   element: any; //object containing the target property
   label?: string;
   onChange: (element: any) => void; //change callback (passes the entire object, not only the property)
@@ -25,17 +25,17 @@ export default function CrudSelectEdit(props: {
   return (
     <FormControl fullWidth={props.fullWidth}>
       <InputLabel id="crud-select-label">
-        {props.label || props.propertyName}
+        {props.label || props.propname}
       </InputLabel>
       <StyledSelectEdit
         //renders provided InputLabel component with the proper behavior (animations and stuff)
         labelId="crud-select-label"
-        label={props.label || props.propertyName}
-        value={props.element[props.propertyName] || props.default}
+        label={props.label || props.propname}
+        value={props.element[props.propname] || props.default}
         onChange={(event) => {
           let value: any = event.target?.value;
           let obj: any = { ...props.element }; //copy the props element
-          obj[props.propertyName] = value; //update target property
+          obj[props.propname] = value; //update target property
           props.onChange(obj); // notify change to parent
         }}
       >

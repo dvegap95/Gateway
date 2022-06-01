@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import HomeView from "./views/HomeView";
 import GatewaysView from "./views/GatewaysView";
 import PeripheralDevicesView from "./views/PeripheralDevicesView";
-import Header from "./components/Header";
+import Header from "./components/common/Header";
 import "./App.css"
 import styled from "styled-components";
 

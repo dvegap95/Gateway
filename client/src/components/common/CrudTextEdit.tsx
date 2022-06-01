@@ -1,15 +1,15 @@
-import { TextField } from "@mui/material";
+import { TextField, TextFieldProps } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
 var timeoutHandler:any = -1;
 
 //mui text field adapted to work as a controlled component over a property of an object
-export default function CrudTextEdit(props: {
-  propertyName: string; //name of the target property in the object
+export default function CrudTextEdit(props: TextFieldProps & {
+  propname: string; //name of the target property in the object
   element: any; //object containing the target property
   label?: string;
   //change callback (passes the entire object, not only the property)
-  onChange: (element: any) => void;
+  onValueChange: (element: any) => void;
   //set of validation callbacks receiving the input value and returning true for valid,
   //false for error with no message or a string for error message to be displayed
   rules?: Array<(value: string) => boolean | string>;
@@ -18,7 +18,7 @@ export default function CrudTextEdit(props: {
   onErrorChange?: (error: boolean | string) => void; //error status callback for parent to be aware of validation process
   fullWidth?: boolean;
   transform?: Function; //applies a transformation to the target property before updating the object containing it
-} & any) {
+}) {
   const [error, setError] = useState(false as boolean | string);
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export default function CrudTextEdit(props: {
   }, [error]);
 
   //evaluates current input value by default
-  const handleChange = (value: any = props.element[props.propertyName]) => {
+  const handleChange = (value: any = props.element[props.propname]) => {
     console.log({ value });
     //are there validation rules and a value to validate?
     if (value && props.rules && props.rules.length) {
@@ -58,17 +58,16 @@ export default function CrudTextEdit(props: {
     }
     if (!value) setError(false); //if(!value) clear the error //TODO handle 'required' property for required values
     let obj: any = { ...props.element }; //copy the props element
-    obj[props.propertyName] = props.transform ? props.transform(value) : value; //update target property
-    if (!value) delete obj[props.propertyName]; //deletes the value if it's casted to boolean as false
-    props.onChange(obj); // notify change to parent
+    obj[props.propname] = props.transform ? props.transform(value) : value; //update target property
+    if (!value) delete obj[props.propname]; //deletes the value if it's casted to boolean as false
+    props.onValueChange(obj); // notify change to parent
   };
 
-  const value = props.element[props.propertyName];
+  const value = props.element[props.propname];
   return (
     <TextField
       {...props}
-      fullWidth={props.fullWidth}
-      label={props.label || props.propertyName}
+      label={props.label || props.propname}
       value={value === null || value === undefined ? "" : value}
       error={!!error}
       helperText={error || undefined}

@@ -1,16 +1,10 @@
 import React, { useState } from "react";
-import {
-  Card,
-  CardActions,
-  IconButton,
-  Tooltip,
-} from "@mui/material";
+import { Card, CardActions, Chip, IconButton, Tooltip } from "@mui/material";
 import styled from "styled-components";
-import Circle from "@mui/icons-material/Circle";
 import Edit from "@mui/icons-material/Edit";
-import { PeripheralDevice } from "../entities/entities";
-import { Delete } from "@mui/icons-material";
-import ConfirmDialog from "./common/ConfirmDialog";
+import { Gateway, PeripheralDevice } from "../../entities/entities";
+import { Circle, Delete } from "@mui/icons-material";
+import ConfirmDialog from "../common/ConfirmDialog";
 
 export const StyledCard = styled(Card)`
   margin: 10px;
@@ -41,45 +35,59 @@ const StyledCardTitle = styled.div`
   font-weight: bold;
   align-items: center;
   padding: 10px;
-  padding-bottom: 2px;
 `;
 
-const StatusDot = styled(Circle)`
+const StyledDot = styled(Circle)`
   max-height: 12px;
   max-width: 12px;
   margin: 5px;
   color: ${(props: { status: any }) =>
-    props.status === "online" ? "#07BC12" : "gray"};
+    props.status === "online" ? "#07BC12" : "gray"}!important;
+  pointer-events: none;
 `;
 
-//controlled component for display peripheral device information as a card.
-export default function PeripheralDeviceCard(props: {
-  device: PeripheralDevice;
-  onEdit?: (device: PeripheralDevice) => void;//callback for edit button pressed
-  onDelete?: (device: PeripheralDevice) => void;//callback for delete button pressed
+const StyledChip = styled(Chip)`
+  margin: 3px !important;
+  min-width: 90px;
+`;
+
+//controlled component for display gateway information as a card.
+export default function GatewayCard(props: {
+  gateway: Gateway;
+  onEdit?: (gateway: Gateway) => void; //callback for edit button pressed
+  onDelete?: (gateway: Gateway) => void; //callback for delete button pressed
 }) {
-  const { device } = props;
+  const { gateway } = props;
   const [deleteConfirm, setDeleteConfirm] = useState(false); //controls when confirm dialog is open
   return (
     <StyledCard>
       <StyledCardTitle>
-        <div>{device.uid || "Unknown UID"}</div>
-        <Tooltip title={`status: ${device.status}`}>
-          <StatusDot status={device.status} />
-        </Tooltip>
+        <div>{gateway.name || "Unknown"}</div>
+        {gateway.ipAddress && (
+          <div style={{ color: "#888" }}>{gateway.ipAddress}</div>
+        )}
       </StyledCardTitle>
       <StyledCardContent>
-        {device.vendor && <div>vendor: {device.vendor}</div>}
+        {gateway.devices.map((dev) => (
+          <StyledChip
+            label={dev.uid + " - " + dev.vendor || "unknown"}
+            variant="outlined"
+            size="small"
+            deleteIcon={<StyledDot status={dev.status}/>}
+            onDelete={() => {}}
+            key={dev._id}
+          />
+        ))}
       </StyledCardContent>
       <StyledCardActions>
-        <div>Created at {new Date(device.created).toLocaleString()}</div>
+        <div>serial: {gateway.serialNumber}</div>
         <div>
           <IconButton
             disabled={!props.onEdit}
             size="small"
             onClick={(e) => {
               e.stopPropagation();
-              return props.onEdit && props.onEdit(device);
+              return props.onEdit && props.onEdit(gateway);
             }}
           >
             <Edit></Edit>
@@ -89,7 +97,7 @@ export default function PeripheralDeviceCard(props: {
             size="small"
             onClick={(e) => {
               e.stopPropagation;
-              setDeleteConfirm(true);//opens confirm dialog before deleting
+              setDeleteConfirm(true); //opens confirm dialog before deleting
             }}
           >
             <Delete></Delete>
@@ -100,11 +108,11 @@ export default function PeripheralDeviceCard(props: {
         title="Confirm delete item?"
         onConfirm={() => {
           //if confirm dialog is accepted notify to the parent component the item to be deleted
-          props.onDelete && props.onDelete(device);
-          setDeleteConfirm(false);//close the dialog
+          props.onDelete && props.onDelete(gateway);
+          setDeleteConfirm(false); //close the dialog
         }}
         onCancel={() => {
-          setDeleteConfirm(false);//close the dialog
+          setDeleteConfirm(false); //close the dialog
         }}
         open={deleteConfirm}
       />

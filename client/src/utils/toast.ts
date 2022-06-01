@@ -3,8 +3,7 @@ import { toast as _toast, ToastOptions } from 'react-toastify';
 let defaultOptions:ToastOptions = {
     type:'success',
     position: "bottom-right",
-    autoClose:2000,
-    progress:"none",
+    autoClose:1000,
 }
 
 

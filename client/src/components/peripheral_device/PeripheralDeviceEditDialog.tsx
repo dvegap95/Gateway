@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { PeripheralDevice } from "../entities/entities";
+import { PeripheralDevice } from "../../entities/entities";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import {
@@ -12,9 +12,9 @@ import {
   TextField,
 } from "@mui/material";
 import styled from "styled-components";
-import CrudTextEdit from "./common/CrudTextEdit";
-import CrudSelectEdit from "./common/CrudSelectEdit";
-import CrudDateEdit from "./common/CrudDateEdit";
+import CrudTextEdit from "../common/CrudTextEdit";
+import CrudSelectEdit from "../common/CrudSelectEdit";
+import CrudDateEdit from "../common/CrudDateEdit";
 
 const StyledFormControl = styled.div`
   margin: 20px;
@@ -24,7 +24,7 @@ const StyledFormControl = styled.div`
 
 export default function PeripheralDeviceEditDialog(props: {
   device: PeripheralDevice; //device value for controlled component
-  onChange: (device: PeripheralDevice) => void; //callback for controlled component
+  onValueChange: (device: PeripheralDevice) => void; //callback for controlled component
   open: boolean; //mui Dialog open prop
   onCancel: () => void; //cancel callback
   onAccept: () => void; //accept callback
@@ -47,9 +47,9 @@ export default function PeripheralDeviceEditDialog(props: {
         <StyledFormControl>
           <CrudTextEdit
             element={device}
-            propertyName="uid"
+            propname="uid"
             label="UID"
-            onChange={props.onChange}
+            onValueChange={props.onValueChange}
             rules={[
               //uid validation rules (it should be a positive integer)
               (val: any) =>
@@ -77,18 +77,18 @@ export default function PeripheralDeviceEditDialog(props: {
         <StyledFormControl>
           <CrudTextEdit
             element={device}
-            propertyName="vendor"
+            propname="vendor"
             label="Vendor"
-            onChange={props.onChange}
+            onValueChange={props.onValueChange}
             fullWidth
           />
         </StyledFormControl>
         <StyledFormControl>
           <CrudSelectEdit
             element={device}
-            propertyName="status"
+            propname="status"
             label="Status"
-            onChange={props.onChange}
+            onChange={props.onValueChange}
             items={["online", "offline"]} //all 2 possible statuses of the device
             default="offline"
             fullWidth
@@ -98,8 +98,8 @@ export default function PeripheralDeviceEditDialog(props: {
           <CrudDateEdit
             label="Created"
             element={device}
-            propertyName="created"
-            onChange={props.onChange}
+            propname="created"
+            onValueChange={props.onValueChange}
             fullWidth
           />
         </StyledFormControl>

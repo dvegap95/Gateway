@@ -3,11 +3,11 @@ import styled from "styled-components";
 import Loading from "../components/common/Loading";
 import PeripheralDeviceCard, {
   StyledCard as Card,
-} from "../components/PeripheralDeviceCard";
+} from "../components/peripheral_device/PeripheralDeviceCard";
 import custom_axios from "../utils/custom_axios";
 import { PeripheralDevice } from "../entities/entities";
 import toast, { errorToast } from "../utils/toast";
-import PeripheralDeviceEditDialog from "../components/PeripheralDeviceEditDialog";
+import PeripheralDeviceEditDialog from "../components/peripheral_device/PeripheralDeviceEditDialog";
 import { Add } from "@mui/icons-material";
 import { CardContent, Tooltip } from "@mui/material";
 
@@ -140,7 +140,7 @@ export default function PeripheralDevicesView() {
       <PeripheralDeviceEditDialog
         open={editing}
         device={editedDevice}
-        onChange={setEditedDevice}
+        onValueChange={setEditedDevice}
         onCancel={() => setEditing(false)}
         onAccept={handleAccept}
       />
