@@ -1,5 +1,4 @@
 import axios, { AxiosError } from "axios";
-import { Service } from "axios-middleware";
 
 //middlewares, error checking, etc
 axios.interceptors.response.use(
