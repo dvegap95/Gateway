@@ -48,6 +48,7 @@ const StyledDialogContent = styled(DialogContent)`
       ? `
     align-items:center;
     flex-direction:column;
+    padding:0 !important;
     `
       : `
       flex-direction:row
