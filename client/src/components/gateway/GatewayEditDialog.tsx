@@ -94,8 +94,8 @@ export default function GatewayEditDialog(
 
   //delete the api-deleted peripheral device from local gateway's devices array
   function handleDeleteDevice(device: PeripheralDevice) {
-   let gw = { ...gateway };
-   //find device in gateway
+    let gw = { ...gateway };
+    //find device in gateway
     let index = gw.devices.findIndex((el) => {
       return el._id === device._id;
     });
@@ -107,8 +107,7 @@ export default function GatewayEditDialog(
     props.onValueChange(gw);
   }
 
-    
-//Add the api-added peripheral device to local gateway's devices array
+  //Add the api-added peripheral device to local gateway's devices array
   function handleAddDevice(device: PeripheralDevice) {
     //validate 10 devices rule (this is only for newly created gateways, otherwise validation
     //has already been done at this point by the API)
@@ -158,6 +157,7 @@ export default function GatewayEditDialog(
                           valid && //is previous section valid?
                           !Number.isNaN(currByte) && //is current section a valid number?
                           Number.isInteger(+currByte) && //is current section an integer?
+                          currByte !== "" && //it's not an empty string, which would be converted to number 0
                           +currByte >= 0 &&
                           +currByte <= 255 // is current section value betwen 0 and 255?
                         );
@@ -182,7 +182,7 @@ export default function GatewayEditDialog(
             <CrudTextEdit
               element={gateway}
               propName="serialNumber"
-              label="SerialNumber"
+              label="Serial Number"
               onValueChange={props.onValueChange}
               fullWidth
             />
@@ -192,7 +192,7 @@ export default function GatewayEditDialog(
           <GatewayDevicesLabel>
             Devices [{gateway.devices?.length || 0}]
           </GatewayDevicesLabel>
-          <ScrollView fullScreen={fullScreen}>
+          <ScrollView fullScreen={fullScreen} data-testid="scroll_view">
             {!gateway.devices?.length && (
               <div
                 style={{

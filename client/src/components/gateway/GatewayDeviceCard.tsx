@@ -103,6 +103,7 @@ export default function GatewayDeviceCard(
                   : props.onDelete &&
                     props.onDelete(props.device as PeripheralDevice) //directly handle delete PeripheralDevice by parent
             }
+            data-testid="delete_btn"
           >
             <Delete />
           </IconButton>
@@ -115,7 +116,8 @@ export default function GatewayDeviceCard(
                 : props.onAdd && props.onAdd(selectedDevice); //directly handle add PeripheralDevice by parent
               setSelectedDevice({} as PeripheralDevice);
             }}
-            disabled={!selectedDevice._id}//disable add if no device is selected
+            disabled={!selectedDevice._id} //disable add if no device is selected
+            data-testid="add_btn"
           >
             <Add />
           </IconButton>

@@ -89,6 +89,7 @@ export default function GatewayCard(props: {
               e.stopPropagation();
               return props.onEdit && props.onEdit(gateway);
             }}
+            data-testid="edit_btn"
           >
             <Edit></Edit>
           </IconButton>
@@ -99,6 +100,7 @@ export default function GatewayCard(props: {
               e.stopPropagation;
               setDeleteConfirm(true); //opens confirm dialog before deleting
             }}
+            data-testid="delete_btn"
           >
             <Delete></Delete>
           </IconButton>

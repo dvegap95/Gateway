@@ -146,7 +146,7 @@ export default function GatewayView() {
           }}
         />
       ))}
-      <Tooltip title="Create...">
+      <Tooltip title="Create gateway...">
         <StyledCard
           onClick={() => {
             setEditedGateway({} as Gateway);
@@ -163,6 +163,7 @@ export default function GatewayView() {
               boxSizing: "border-box",
               textAlign: "center",
             }}
+            data-testid="gateway_add_card"
           >
             <Add />
           </CardContent>

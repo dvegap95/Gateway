@@ -148,7 +148,7 @@ export default function PeripheralDevicesView() {
           />
         ))
       )}
-      <Tooltip title="Create...">
+      <Tooltip title="Create device...">
         <StyledCard
           onClick={() => {
             setEditedDevice({} as PeripheralDevice);
@@ -165,6 +165,7 @@ export default function PeripheralDevicesView() {
               boxSizing: "border-box",
               textAlign: "center",
             }}
+            data-testid="peripheral_device_add_card"
           >
             <Add />
           </CardContent>
