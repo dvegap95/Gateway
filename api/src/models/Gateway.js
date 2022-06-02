@@ -14,7 +14,7 @@ const gatewaySchema = new mongoose.Schema({
     type: String,
     validate: {
       validator: (ip) => {
-        if(ip === null || ip === undefined)return true;//so it's not required
+        if (ip === null || ip === undefined) return true; //so it's not required
         //ip address validator (algorithm)
         let bytes = ip.split("."); //separates ip sections (bytes)
         return (
@@ -25,6 +25,7 @@ const gatewaySchema = new mongoose.Schema({
               valid && //is previous section valid?
               !Number.isNaN(currByte) && //is current section a valid number?
               Number.isInteger(+currByte) && //is current section an integer?
+              currByte !== "" && //it's not an empty string, which would be converted to number 0
               +currByte >= 0 &&
               +currByte <= 255 // is current section value betwen 0 and 255?
             );
