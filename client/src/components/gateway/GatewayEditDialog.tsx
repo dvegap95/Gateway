@@ -2,17 +2,12 @@ import React, { useState } from "react";
 import { Gateway, PeripheralDevice } from "../../entities/entities";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import {
-  Button,
-  Card,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogProps,
-  DialogTitle,
-  TextField,
-} from "@mui/material";
+import Button from "@mui/material/Button";
+import Dialog,{DialogProps} from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+
 import styled from "styled-components";
 import CrudTextEdit from "../common/CrudTextEdit";
 import GatewayDeviceCard from "./GatewayDeviceCard";

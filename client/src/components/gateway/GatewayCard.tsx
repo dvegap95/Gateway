@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { Card, CardActions, Chip, IconButton, Tooltip } from "@mui/material";
+import Card from "@mui/material/Card"
+import CardActions from "@mui/material/CardActions"
+import IconButton from "@mui/material/IconButton"
+import Chip from "@mui/material/Chip"
 import styled from "styled-components";
 import Edit from "@mui/icons-material/Edit";
 import { Gateway, PeripheralDevice } from "../../entities/entities";

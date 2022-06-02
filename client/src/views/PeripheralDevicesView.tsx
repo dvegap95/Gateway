@@ -9,7 +9,8 @@ import { PeripheralDevice } from "../entities/entities";
 import toast, { errorToast } from "../utils/toast";
 import PeripheralDeviceEditDialog from "../components/peripheral_device/PeripheralDeviceEditDialog";
 import { Add } from "@mui/icons-material";
-import { CardContent, Tooltip } from "@mui/material";
+import CardContent from "@mui/material/CardContent";
+import Tooltip from "@mui/material/Tooltip";
 
 const endpoint = "/api/peripheral-devices";
 

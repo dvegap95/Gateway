@@ -1,5 +1,7 @@
 import React from "react";
-import { Backdrop, BackdropProps, CircularProgress } from "@mui/material";
+import Backdrop,{BackdropProps} from "@mui/material/Backdrop"
+import CircularProgress from "@mui/material/CircularProgress"
+
 import styled from "styled-components";
 
 export default function Loading(props: BackdropProps | { open: boolean }) {

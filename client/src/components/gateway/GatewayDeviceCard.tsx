@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import styled from "styled-components";
-import { CardProps, CircularProgress, IconButton } from "@mui/material";
+import { CardProps } from "@mui/material/Card";
+import IconButton from "@mui/material/IconButton";
+import CircularProgress from "@mui/material/CircularProgress";
+
 import { StyledCard as Card } from "../peripheral_device/PeripheralDeviceCard";
 import custom_axios from "../../utils/custom_axios";
 import { PeripheralDevice } from "../../entities/entities";

@@ -9,17 +9,10 @@ import { PeripheralDevice } from "../../entities/entities";
 import toast, { errorToast } from "../../utils/toast";
 import PeripheralDeviceEditDialog from "./PeripheralDeviceEditDialog";
 import { Add, Delete } from "@mui/icons-material";
-import {
-  CardContent,
-  CircularProgress,
-  FormControl,
-  FormControlProps,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  Select,
-  Tooltip,
-} from "@mui/material";
+import FormControl, { FormControlProps } from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 
 const endpoint = "/api/peripheral-devices";
 
@@ -63,9 +56,9 @@ export default function PeripheralDeviceSelect(
       .post(endpoint, editedDevice)
       .then((res) => {
         //add element to local peripheral devices and update stored peripheral devices status
-        let d = [...data]; 
-        setData(d.concat([res.data])); 
-        
+        let d = [...data];
+        setData(d.concat([res.data]));
+
         setEditing(false); //close dialog
         setLoading(false);
         props.onValueChange(res.data); //notify to parent component
@@ -103,7 +96,7 @@ export default function PeripheralDeviceSelect(
           handleSelect(e.target?.value as string);
         }}
         value={props.value._id || ""}
-        color="grey"
+        style={{ color: "grey !important" }}
       >
         {data
           .filter(

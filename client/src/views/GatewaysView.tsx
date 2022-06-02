@@ -9,7 +9,8 @@ import { Gateway } from "../entities/entities";
 import toast, { errorToast } from "../utils/toast";
 import GatewayEditDialog from "../components/gateway/GatewayEditDialog";
 import { Add } from "@mui/icons-material";
-import { CardContent, Tooltip } from "@mui/material";
+import CardContent from "@mui/material/CardContent";
+import Tooltip from "@mui/material/Tooltip";
 
 const endpoint = "/api/gateways";
 

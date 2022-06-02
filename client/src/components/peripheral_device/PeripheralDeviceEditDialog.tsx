@@ -2,15 +2,12 @@ import React, { useState } from "react";
 import { PeripheralDevice } from "../../entities/entities";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  TextField,
-} from "@mui/material";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+
 import styled from "styled-components";
 import CrudTextEdit from "../common/CrudTextEdit";
 import CrudSelectEdit from "../common/CrudSelectEdit";

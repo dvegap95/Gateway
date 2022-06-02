@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { Card, CardActions, IconButton, Tooltip } from "@mui/material";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
 import styled from "styled-components";
 import Circle from "@mui/icons-material/Circle";
 import Edit from "@mui/icons-material/Edit";
