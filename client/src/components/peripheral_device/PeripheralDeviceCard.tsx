@@ -47,7 +47,6 @@ const StatusDot = styled(Circle)`
   max-width: 12px;
   margin: 5px;
   color: ${(props: { status: any }) => {
-    console.log("status evaluated");
     return props.status === "online" ? "#07BC12" : "gray";
   }};
 `;

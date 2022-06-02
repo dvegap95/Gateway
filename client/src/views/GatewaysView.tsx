@@ -43,7 +43,6 @@ export default function GatewayView() {
     custom_axios
       .get(endpoint)
       .then((res) => {
-        console.log({ res });
         setData(res.data); //store fetched gateways
         setLoading(false); //stop loading (which is true by default)
         //success is required for the component to work, so it won't be notified

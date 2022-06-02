@@ -1,0 +1,19 @@
+{
+  "name": "gateway",
+  "version": "1.0.0",
+  "description": "Answer to an acquisition process test",
+  "main": "start.js",
+  "scripts": {
+    "start": "node scripts/start.js",
+    "dev": "node scripts/dev.js",
+    "test": "node scripts/e2e_test.js",
+    "test-api": "node scripts/api_unit_tests.js",
+    "install": "node scripts/install.js",
+    "build-client": "node scripts/build_client.js"
+  },
+  "author": "Daniel Vega Pino",
+  "license": "ISC",
+  "dependencies": {
+    "shelljs": "^0.8.5"
+  }
+}

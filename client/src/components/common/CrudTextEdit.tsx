@@ -39,7 +39,6 @@ export default function CrudTextEdit(
 
   //evaluates current input value by default
   const handleChange = (value: any = props.element[props.propName]) => {
-    console.log({ value });
     //are there validation rules and a value to validate?
     if (value && props.rules && props.rules.length) {
       let i = 0;

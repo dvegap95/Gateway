@@ -1,6 +1,5 @@
 require("../dotenv");
 const Gateway = require("../../models/Gateway");
-require("dotenv").config();
 const mongoose = require("mongoose");
 //id for working globally with a known gateway
 const _id = new mongoose.Types.ObjectId();

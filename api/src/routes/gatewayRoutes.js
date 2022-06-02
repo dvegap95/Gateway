@@ -114,7 +114,6 @@ router.post("/:id/device", getGatewayMiddleware, async (req, res) => {
   if (error) {
     return res.status(400).json({ ...error.errors }); // validation went wrong
   }
-  console.log(res.gateway);
   try {
     await res.gateway.save(); //save target gateway
     //return 200 for previously existent device or 201 for newly created device

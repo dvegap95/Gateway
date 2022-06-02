@@ -9,7 +9,6 @@ async function getPeripheralDeviceMiddleware(req, res, next) {
   let device;
   try {
     device = await PeripheralDevice.findById(req.params.id); //find device in db
-    console.log(device, req.params && req.params.id);
     if (!device) return res.status(404).json({ message: "Cannot find device" }); //retrun 404 if not found
   } catch (e) {
     //return 404 if :id doesn't fit mongoose requirements, since it means this _id never existed and never will

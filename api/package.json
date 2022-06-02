@@ -4,7 +4,7 @@
   "description": "Api REST",
   "main": "src/index.js",
   "scripts": {
-    "test": "jest --detectOpenHandles --runInBand --config ./jest.config.json",
+    "test": "jest --runInBand --config ./jest.config.json",
     "test-watch": "npm test -- --watch",
     "start": "nodemon src/index.js"
   },
