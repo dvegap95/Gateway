@@ -138,6 +138,8 @@ npm run build-client
 
 - Validate gateway endpoint so it doesn't allow editing the device's property if there are duplicated device \_id's
 
+- Implement lazy load for the page to load faster 
+
 ### In code
 
 - [Validation timeout reset](./client/src/components/common/CrudTextEdit.tsx#L36)
