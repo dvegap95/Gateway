@@ -3,6 +3,7 @@ import { ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import HomeView from "./views/HomeView";
+import NotFoundView from "./views/NotFoundView";
 import GatewaysView from "./views/GatewaysView";
 import PeripheralDevicesView from "./views/PeripheralDevicesView";
 import Header from "./components/common/Header";
@@ -26,6 +27,7 @@ function App() {
             path="/peripheral-devices"
             element={<PeripheralDevicesView />}
           />
+          <Route path="*" element={<NotFoundView />} />
         </Routes>
       </Container>
       <ToastContainer/>
