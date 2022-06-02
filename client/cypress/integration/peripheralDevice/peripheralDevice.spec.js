@@ -73,7 +73,7 @@ describe("peripheral devices tests", () => {
         .findByTestId("delete_btn")
         .click(); //click delete button in the test card
       cy.findByText("Confirm").click(); //click confirm delete
-      cy.findDeviceCardByText("vendor: " + vendor).should("not.exist"); //check delete locally
+      cy.findByText("vendor: " + vendor).should("not.exist"); //check delete locally
       cy.reload();
       cy.findByText("vendor: " + vendor).should("not.exist"); //check delete in backend
     });
